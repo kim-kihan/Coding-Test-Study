@@ -1,78 +1,53 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
+
 
 public class Main {
-	
-	static int n=0,k=0;
-	static int max = Integer.MIN_VALUE;
-	static Scanner sc = new Scanner(System.in);
-
-	public static void main(String[] args) throws IOException {
+	static boolean [][] a;
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		n = sc.nextInt();
-		k = sc.nextInt();
-		sc.nextLine();
-		List<String> list = new ArrayList<>();
-		list.add("a");
-		list.add("n");
-		list.add("t");
-		list.add("i");
-		list.add("c");
-		List<String> strArr = new ArrayList<>();
-		boolean[] visited = new boolean[26];
-		visited['a'-'a']=true;
-		visited['n'-'a']=true;
-		visited['t'-'a']=true;
-		visited['i'-'a']=true;
-		visited['c'-'a']=true;
-		
-		if(k<5) {
-			System.out.println(0);
-		}else if(k == 26) {
-            System.out.println(n);
-        }else {
-			for(int i=0;i<n;i++) {
-				String str = sc.nextLine();
-				for(int j=0;j<list.size();j++) {
-					str = str.replaceAll(list.get(j), "");
-				}
-				strArr.add(str);
+		int T=0,N=0,M=0,K=0,X=0,Y=0;
+		Scanner sc = new Scanner(System.in);
+		T=sc.nextInt();
+		for(int tc=0;tc<T;tc++) {
+			N=sc.nextInt();
+			M=sc.nextInt();
+			K=sc.nextInt();
+			int count = 0;
+			a = new boolean [N][M];
+			for(int j=0;j<K;j++) {
+				X=sc.nextInt();
+				Y=sc.nextInt();
+				a[X][Y]=true;
 			}
-			dfs(strArr,visited,0,0);
-			System.out.println(max);
-			
-		}
-		
-	}
-
-	private static void dfs(List<String> strArr, boolean[] visited, int alpha, int len) {
-		if(len == k - 5) {
-            int count = 0;
-            for(int i = 0; i < n; i++) {
-                boolean read = true;
-                for(int j = 0; j < strArr.get(i).length(); j++) {
-                    if(!visited[strArr.get(i).charAt(j) - 'a']) {
-                        read = false;
-                        break;
+			for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if (a[i][j]) {
+                        DFS(i, j, N, M);
+                        count++;
                     }
                 }
-                if(read) count++;
-            }
-            max = Math.max(max, count);
-            return;
-        }
-        
-        for(int i = alpha; i < 26; i++) {
-            if(!visited[i]) {
-                visited[i] = true;
-                dfs(strArr,visited,i, len + 1);
-                visited[i] = false;
-            }
-        }
+			}
+			System.out.println(count);
+		}
+		
+		
+		
 	}
-
+	 public static void DFS(int X, int Y, int N, int M) {
+		 int[] dx = { -1, 0, 1, 0 };
+		 int[] dy = { 0, 1, 0, -1 };
+	     for (int i = 0; i < 4; i++) {
+	    	int nextX = X + dx[i];
+	      	int nextY = Y + dy[i];
+	     	if (nextX < 0 || nextY < 0 || nextX >= N || nextY >= M) {
+	         	continue;
+	      	}
+	       	if (!a[nextX][nextY]) {
+	       	continue;
+	       	}
+	      	a[nextX][nextY] = false;
+	    	DFS(nextX, nextY, N, M);
+	    }
+	 }
 }
